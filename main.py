@@ -67,20 +67,50 @@ class Game:
         for row in self.board:
             print(' | '.join(['P1' if p == self.player1 else 'P2' if p == self.player2 else ' ' for p in row]))
             print('-' * 13)
-
+    def verifica_input(self,str):
+        validacao = 0
+        array = str.split(',')
+        if len(array) == 3:
+            validacao += 1
+        if array[0] == "Q" or array[0] == "W" or array[0] == "A" or array[0] == "S" or array[0] == "D" or array[0] == "WA" or array[0] == "WD" or array[0] == "SA" or array[0] == "SD":
+             validacao += 1
+        if array[1] == "Q" or array[1] == "W" or array[1] == "A" or array[1] == "S" or array[1] == "D" or array[1] == "WA" or array[1] == "WD" or array[1] == "SA" or array[1] == "SD":
+             validacao += 1  
+        if array[2] == "Q" or array[2] == "W" or array[2] == "A" or array[2] == "S" or array[2] == "D" or array[2] == "WA" or array[2] == "WD" or array[2] == "SA" or array[2] == "SD":
+             validacao += 1
+            
+        if validacao == 4:
+            return True
+        else:
+            return False
     def play_turn(self):
         if self.player1.previous_attack:
-            print(f"Player 1 previous attack: {self.player1.previous_attack}")
-        if self.player2.previous_attack:
-            print(f"Player 2 previous attack: {self.player2.previous_attack}")
+            print(f"Player 1\n ultimo ataque: {self.player1.previous_attack}")
         if self.player1.previous_defese:
-            print(f"Player 1 previous defese: {self.player1.previous_defese}")
+            print(f" ultima defesa: {self.player1.previous_defese}")
+        if self.player2.previous_attack:
+            print(f"Player 2\n ultimo ataque: {self.player2.previous_attack}")
         if self.player2.previous_defese:
-            print(f"Player 1 previous defese: {self.player2.previous_defese}")
+            print(f" ultima defesa: {self.player2.previous_defese}")
 
         print("\nEscolha sua movimentação,ataque e defesa, dividido por virgula.\n\n")
-        self.player1.move(input("Jogador 1: ").upper(),self.player2.position)
-        self.player2.move(input("Jogador 2: ").upper(),self.player1.position)
+
+        while True:
+            keydownPlayer1 = input("Jogador 1: ").upper()
+            if self.verifica_input(keydownPlayer1):
+                break
+            else:
+                print("A Letra escolhida não se refere a nenhum tipo de movimentação, tente novamente.")
+
+        while True:
+            keydownPlayer2 = input("Jogador 1: ").upper()
+            if self.verifica_input(keydownPlayer2):
+                break
+            else:
+                print("A Letra escolhida não se refere a nenhum tipo de movimentação, tente novamente.")
+
+        self.player1.move(keydownPlayer1,self.player2.position)
+        self.player2.move(keydownPlayer2,self.player1.position)
 
         self.battle()
 
@@ -97,6 +127,8 @@ class Game:
             print(f"{self.winner} wins!")
             return True
         return False
+    
+    #função feita para construção de lógica de combate
     def battle(self):
         #Dano recebido de baixo sem bloqueio
         if self.player1.attack_direction == 'W':
@@ -105,7 +137,14 @@ class Game:
         if self.player2.attack_direction == 'W':
             if self.player1.position == (self.player2.position[0],self.player2.position[1]-1) and self.player1.defend_direction != 'S':
                 self.player1.hp = self.player1.hp - self.player2.dmg  
-        
+
+        #Dano recebido de cima sem bloqueio
+        if self.player1.attack_direction == 'S':
+            if self.player2 == (self.player1.position[0],self.player1.position[1]+1) and self.player2.defend_direction != 'W':
+                self.player2.hp = self.player2.hp - self.player1.dmg
+        if self.player2.attack_direction == 'S':
+            if self.player1 == (self.player2.position[0],self.player2.position[1]+1) and self.player1.defend_direction != 'W':
+                self.player1.hp = self.player1.hp - self.player2.dmg
          
 
     def update_board(self):
@@ -120,11 +159,14 @@ class Game:
             self.winner = self.player1.name
         else:
             return (False,"teste")
-os.system('clear')
 game = Game()
 game.display_board()
 
 while True:
     if game.play_turn():
         break
+    if os.name == 'nt':
+        os.system('cls')
+    else:
+        os.system('clear')
     game.display_board()
