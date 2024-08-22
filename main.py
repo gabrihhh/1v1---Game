@@ -108,7 +108,7 @@ class Game:
                 print("A Letra escolhida não se refere a nenhum tipo de movimentação, tente novamente.")
 
         while True:
-            keydownPlayer2 = input("Jogador 1: ").upper()
+            keydownPlayer2 = input("Jogador 2: ").upper()
             if self.verifica_input(keydownPlayer2):
                 break
             else:
@@ -128,7 +128,7 @@ class Game:
         return False
     #função feita para construção de lógica de combate
     def battle(self):
-        #Dano recebido de baixo sem bloqueio
+        #Dano para cima
         if self.player1.attack_direction == 'W':
             if self.player2.position == (self.player1.position[0],self.player1.position[1]-1):
                 if self.player2.defend_direction == 'S':
@@ -144,7 +144,7 @@ class Game:
                     print(f"{self.player1.name} tomou um hit!")
                     self.player1.hp = self.player1.hp - self.player2.dmg  
 
-        #Dano recebido de cima sem bloqueio
+        #Dano para baixo
         if self.player1.attack_direction == 'S':
             if self.player2 == (self.player1.position[0],self.player1.position[1]+1):
                 if self.player2.defend_direction == 'W':
@@ -159,6 +159,101 @@ class Game:
                 else:
                     print(f"{self.player1.name} tomou um hit!")
                     self.player1.hp = self.player1.hp - self.player2.dmg  
+        #Dano para esquerda
+        if self.player1.attack_direction=="A":
+            if self.player2.position == (self.player1.position[0]-1,self.player1.position[1]):
+                if self.player2.defend_direction == "D":
+                    print(f"{self.player2.name} bloqueou!")
+                else:
+                    print(f"{self.player2.name} tomou um hit!")
+                    self.player2.hp = self.player2.hp - self.player1.dmg
+
+        if self.player2.attack_direction=="A":
+            if self.player1.position == (self.player2.position[0]-1,self.player2.position[1]):
+                if self.player1.defend_direction == "D":
+                    print(f"{self.player1.name} bloqueou!")
+                else:
+                    print(f"{self.player1.name} tomou um hit!")
+                    self.player1.hp = self.player1.hp - self.player2.dmg
+        
+        #Dano para direita
+        if self.player1.attack_direction=="D":
+            if self.player2.position == (self.player1.position[0]+1,self.player1.position[1]):
+                if self.player2.defend_direction == "A":
+                    print(f"{self.player2.name} bloqueou!")
+                else:
+                    print(f"{self.player2.name} tomou um hit!")
+                    self.player2.hp = self.player2.hp - self.player1.dmg
+        if self.player2.attack_direction=="D":
+            if self.player1.position == (self.player2.position[0]+1,self.player2.position[1]):
+                if self.player1.defend_direction == "A":
+                    print(f"{self.player1.name} bloqueou!")
+                else:
+                    print(f"{self.player1.name} tomou um hit!")
+                    self.player1.hp = self.player1.hp - self.player2.dmg
+        
+        #Dano para Cima Esquerda
+        if self.player1.attack_direction=="WA":
+            if self.player2.position == (self.player1.position[0]-1,self.player1.position[1]-1):
+                if self.player2.defend_direction == "SD":
+                    print(f"{self.player2.name} bloqueou!")
+                else:
+                    print(f"{self.player2.name} tomou um hit!")
+                    self.player2.hp = self.player2.hp - self.player1.dmg
+        if self.player2.attack_direction=="WA":
+            if self.player1.position == (self.player2.position[0]-1,self.player2.position[1]-1):
+                if self.player1.defend_direction == "SD":
+                    print(f"{self.player1.name} bloqueou!")
+                else:
+                    print(f"{self.player1.name} tomou um hit!")
+                    self.player1.hp = self.player1.hp - self.player2.dmg
+         #Dano para Baixo Esquerda
+        if self.player1.attack_direction=="SA":
+            if self.player2.position == (self.player1.position[0]-1,self.player1.position[1]+1):
+                if self.player2.defend_direction == "WD":
+                    print(f"{self.player2.name} bloqueou!")
+                else:
+                    print(f"{self.player2.name} tomou um hit!")
+                    self.player2.hp = self.player2.hp - self.player1.dmg
+        if self.player2.attack_direction=="SA":
+            if self.player1.position == (self.player2.position[0]-1,self.player2.position[1]+1):
+                if self.player1.defend_direction == "WD":
+                    print(f"{self.player1.name} bloqueou!")
+                else:
+                    print(f"{self.player1.name} tomou um hit!")
+                    self.player1.hp = self.player1.hp - self.player2.dmg
+         #Dano para Cima Direita
+        if self.player1.attack_direction=="WD":
+            if self.player2.position == (self.player1.position[0]+1,self.player1.position[1]-1):
+                if self.player2.defend_direction == "SA":
+                    print(f"{self.player2.name} bloqueou!")
+                else:
+                    print(f"{self.player2.name} tomou um hit!")
+                    self.player2.hp = self.player2.hp - self.player1.dmg
+        if self.player2.attack_direction=="WD":
+            if self.player1.position == (self.player2.position[0]+1,self.player2.position[1]-1):
+                if self.player1.defend_direction == "SA":
+                    print(f"{self.player1.name} bloqueou!")
+                else:
+                    print(f"{self.player1.name} tomou um hit!")
+                    self.player1.hp = self.player1.hp - self.player2.dmg
+         #Dano para Baixo Direita
+        if self.player1.attack_direction=="WD":
+            if self.player2.position == (self.player1.position[0]+1,self.player1.position[1]+1):
+                if self.player2.defend_direction == "WA":
+                    print(f"{self.player2.name} bloqueou!")
+                else:
+                    print(f"{self.player2.name} tomou um hit!")
+                    self.player2.hp = self.player2.hp - self.player1.dmg
+        if self.player2.attack_direction=="WD":
+            if self.player1.position == (self.player2.position[0]+1,self.player2.position[1]+1):
+                if self.player1.defend_direction == "WA":
+                    print(f"{self.player1.name} bloqueou!")
+                else:
+                    print(f"{self.player1.name} tomou um hit!")
+                    self.player1.hp = self.player1.hp - self.player2.dmg
+
+
 
     def update_board(self):
         self.board = [[None for _ in range(5)] for _ in range(5)]
