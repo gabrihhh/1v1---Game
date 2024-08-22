@@ -84,6 +84,11 @@ class Game:
         else:
             return False
     def play_turn(self):
+        if self.winner:
+            print(f"{self.winner} wins!")
+            return True
+
+
         if self.player1.previous_attack:
             print(f"Player 1\n ultimo ataque: {self.player1.previous_attack}")
         if self.player1.previous_defese:
@@ -112,40 +117,48 @@ class Game:
         self.player1.move(keydownPlayer1,self.player2.position)
         self.player2.move(keydownPlayer2,self.player1.position)
 
-        self.battle()
-
         self.update_board()
-
+        
         self.player1.previous_attack = self.player1.attack_direction
         self.player2.previous_attack = self.player2.attack_direction
 
         self.player1.previous_defese = self.player1.defend_direction
         self.player2.previous_defese = self.player2.defend_direction
 
-        self.check_winner()
-        if self.winner:
-            print(f"{self.winner} wins!")
-            return True
         return False
-    
     #função feita para construção de lógica de combate
     def battle(self):
         #Dano recebido de baixo sem bloqueio
         if self.player1.attack_direction == 'W':
-            if self.player2.position == (self.player1.position[0],self.player1.position[1]-1) and self.player2.defend_direction != 'S':
-                self.player2.hp = self.player2.hp - self.player1.dmg
+            if self.player2.position == (self.player1.position[0],self.player1.position[1]-1):
+                if self.player2.defend_direction == 'S':
+                    print(f"{self.player2.name} bloqueou!")
+                else:
+                    print(f"{self.player2.name} tomou um hit!")
+                    self.player2.hp = self.player2.hp - self.player1.dmg
         if self.player2.attack_direction == 'W':
-            if self.player1.position == (self.player2.position[0],self.player2.position[1]-1) and self.player1.defend_direction != 'S':
-                self.player1.hp = self.player1.hp - self.player2.dmg  
+            if self.player1.position == (self.player2.position[0],self.player2.position[1]-1):
+                if self.player1.defend_direction == 'S':
+                    print(f"{self.player1.name} bloqueou!")
+                else:
+                    print(f"{self.player1.name} tomou um hit!")
+                    self.player1.hp = self.player1.hp - self.player2.dmg  
 
         #Dano recebido de cima sem bloqueio
         if self.player1.attack_direction == 'S':
-            if self.player2 == (self.player1.position[0],self.player1.position[1]+1) and self.player2.defend_direction != 'W':
-                self.player2.hp = self.player2.hp - self.player1.dmg
+            if self.player2 == (self.player1.position[0],self.player1.position[1]+1):
+                if self.player2.defend_direction == 'W':
+                    print(f"{self.player2.name} bloqueou!")
+                else:
+                    print(f"{self.player2.name} tomou um hit!")
+                    self.player2.hp = self.player2.hp - self.player1.dmg
         if self.player2.attack_direction == 'S':
-            if self.player1 == (self.player2.position[0],self.player2.position[1]+1) and self.player1.defend_direction != 'W':
-                self.player1.hp = self.player1.hp - self.player2.dmg
-         
+            if self.player1 == (self.player2.position[0],self.player2.position[1]+1):
+                if self.player1.defend_direction == 'W':
+                    print(f"{self.player1.name} bloqueou!")
+                else:
+                    print(f"{self.player1.name} tomou um hit!")
+                    self.player1.hp = self.player1.hp - self.player2.dmg  
 
     def update_board(self):
         self.board = [[None for _ in range(5)] for _ in range(5)]
@@ -170,3 +183,5 @@ while True:
     else:
         os.system('clear')
     game.display_board()
+    game.battle()
+    game.check_winner()
